@@ -1,0 +1,14 @@
+/Users/devondalebro/tor/proc-macro/macro_crate/target/debug/deps/libclang_sys-cbc3b9647353d482.rmeta: /Users/devondalebro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/lib.rs /Users/devondalebro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/support.rs /Users/devondalebro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/link.rs /Users/devondalebro/tor/proc-macro/macro_crate/target/debug/build/clang-sys-1fde286fc3b4b738/out/macros.rs /Users/devondalebro/tor/proc-macro/macro_crate/target/debug/build/clang-sys-1fde286fc3b4b738/out/common.rs /Users/devondalebro/tor/proc-macro/macro_crate/target/debug/build/clang-sys-1fde286fc3b4b738/out/dynamic.rs
+
+/Users/devondalebro/tor/proc-macro/macro_crate/target/debug/deps/libclang_sys-cbc3b9647353d482.rlib: /Users/devondalebro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/lib.rs /Users/devondalebro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/support.rs /Users/devondalebro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/link.rs /Users/devondalebro/tor/proc-macro/macro_crate/target/debug/build/clang-sys-1fde286fc3b4b738/out/macros.rs /Users/devondalebro/tor/proc-macro/macro_crate/target/debug/build/clang-sys-1fde286fc3b4b738/out/common.rs /Users/devondalebro/tor/proc-macro/macro_crate/target/debug/build/clang-sys-1fde286fc3b4b738/out/dynamic.rs
+
+/Users/devondalebro/tor/proc-macro/macro_crate/target/debug/deps/clang_sys-cbc3b9647353d482.d: /Users/devondalebro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/lib.rs /Users/devondalebro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/support.rs /Users/devondalebro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/link.rs /Users/devondalebro/tor/proc-macro/macro_crate/target/debug/build/clang-sys-1fde286fc3b4b738/out/macros.rs /Users/devondalebro/tor/proc-macro/macro_crate/target/debug/build/clang-sys-1fde286fc3b4b738/out/common.rs /Users/devondalebro/tor/proc-macro/macro_crate/target/debug/build/clang-sys-1fde286fc3b4b738/out/dynamic.rs
+
+/Users/devondalebro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/lib.rs:
+/Users/devondalebro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/support.rs:
+/Users/devondalebro/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/link.rs:
+/Users/devondalebro/tor/proc-macro/macro_crate/target/debug/build/clang-sys-1fde286fc3b4b738/out/macros.rs:
+/Users/devondalebro/tor/proc-macro/macro_crate/target/debug/build/clang-sys-1fde286fc3b4b738/out/common.rs:
+/Users/devondalebro/tor/proc-macro/macro_crate/target/debug/build/clang-sys-1fde286fc3b4b738/out/dynamic.rs:
+
+# env-dep:OUT_DIR=/Users/devondalebro/tor/proc-macro/macro_crate/target/debug/build/clang-sys-1fde286fc3b4b738/out
