@@ -17,6 +17,7 @@ pub mod input_node {
             Box::from(NumberType {}),
             Box::from(BoolType {}),
             Box::from(AbsoluteCPtrType {}),
+            Box::from(LocalHandleType {}),
         ]
     }
 
@@ -117,6 +118,35 @@ pub mod input_node {
         fn type_parses(&self) -> Vec<syn::Type> {
             vec![
                 parse_str("&AbsoluteCPtr").expect("Couldn't parse")
+            ]
+        }
+    }
+
+    struct LocalHandleType {}
+    impl InputType for LocalHandleType {
+        fn into_ipc_buf(&self, ident: Ident, buffer_name: Ident, msg_index: &mut usize) -> TokenStream {
+            let idx = (*msg_index).clone();
+            let ret = quote! {
+                #buffer_name.msg_regs_mut()[#idx] = #ident.idx as u64;
+            };
+            *msg_index += 1;
+            ret 
+        }
+        fn type_parses(&self) -> Vec<syn::Type> {
+            vec![
+                parse_str("&LocalHandle<WindowHandle>").expect("Couldn't parse"),
+                parse_str("&LocalHandle<ViewHandle>").expect("Couldn't parse"),
+                parse_str("&LocalHandle<ObjectHandle>").expect("Couldn't parse"),
+                parse_str("&LocalHandle<ConnectionHandle>").expect("Couldn't parse"),
+                parse_str("&LocalHandle<PublishHandle>").expect("Couldn't parse"),
+                parse_str("&LocalHandle<ReplyHandle>").expect("Couldn't parse"),
+                parse_str("&LocalHandle<HandleCapHandle>").expect("Couldn't parse"),
+                parse_str("&LocalHandle<ProcessHandle>").expect("Couldn't parse"),
+                parse_str("&LocalHandle<ConnRegistrationHandle>").expect("Couldn't parse"),
+                parse_str("&LocalHandle<WindowRegistrationHandle>").expect("Couldn't parse"),
+                parse_str("&LocalHandle<IRQRegistrationHandle>").expect("Couldn't parse"),
+                parse_str("&LocalHandle<ChannelAuthorityHandle>").expect("Couldn't parse"),
+                parse_str("&LocalHandle<ChannelHandle>").expect("Couldn't parse"),
             ]
         }
     }
