@@ -181,7 +181,7 @@ pub mod input_node {
                 unimplemented!() // this will never happen
             };
             
-            let inner_ident = format_ident!("inner");
+            let inner_ident = format_ident!("{}_inner", ident);
             let inner_type_marshall = inner_input_type.into_ipc_buf(inner_ident.clone(), inner_type, buffer_name, msg_index);
 
             let ret = quote! {
