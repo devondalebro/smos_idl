@@ -61,9 +61,8 @@ fn format_rust_code(code: String) -> String {
 }
 
 fn parse_method(method: TraitItemFn) -> TokenStream {
-    let method_node = method_node::method_node::MethodNode::new(method);
-    match method_node.to_method(String::from("ipc_buf"), String::from("msg"), 0) {
-        Ok(method_impl) => method_impl,
-        Err(_) => method_node.to_unimplemented()
+    match method_node::method_node::MethodNode::new(method.clone()) {
+        Ok(method_node) => method_node.to_method(String::from("ipc_buf"), String::from("msg"), 0),
+        Err(_) => method_node::method_node::MethodNode::to_unimplemented(method)
     }
 }
