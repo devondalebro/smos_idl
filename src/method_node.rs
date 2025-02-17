@@ -10,6 +10,7 @@ pub mod method_node {
         params: Punctuated<FnArg, Comma>,
         input_params: Vec<InputParam>,
         return_type: ReturnType,
+        has_string: bool,
     }
 
     impl MethodNode {
@@ -17,18 +18,29 @@ pub mod method_node {
             let ident = method.sig.ident;
             let params = method.sig.inputs;
             let return_type = method.sig.output;
-            let sanitised = Self::sanitise_params(params.clone())?;
-            Ok(MethodNode { ident, params, return_type, input_params: sanitised })
+            let (sanitised, has_string) = Self::sanitise_params(params.clone())?;
+            Ok(MethodNode { 
+                ident, 
+                params, 
+                return_type, 
+                input_params: sanitised, 
+                has_string 
+            })
         }
 
-        pub fn sanitise_params(params: Punctuated<FnArg, Comma>) -> Result<Vec<InputParam>, errors::Error> {
+        pub fn sanitise_params(params: Punctuated<FnArg, Comma>) -> Result<(Vec<InputParam>, bool), errors::Error> {
             let mut sanitised = vec![];
             let mut optional_register = vec![];
+            let mut has_string = false;
             for p in params {
                 let input_param = get_input_param(p)?;
                 match input_param.input_type {
                     InputTypes::OptionType => {
                         optional_register.push(input_param);
+                    },
+                    InputTypes::StringType => {
+                        sanitised.push(input_param);
+                        has_string = true;
                     },
                     _ => {
                         sanitised.push(input_param);
@@ -36,7 +48,7 @@ pub mod method_node {
                 }
             }
             sanitised.append(&mut optional_register);
-            Ok(sanitised)
+            Ok((sanitised, has_string))
         }
 
         pub fn to_method(&self, ipc_buffer_name: String, msg_name: String, label: usize) -> TokenStream {
@@ -44,10 +56,26 @@ pub mod method_node {
             let method_ident = self.ident.clone();
             let method_params = self.params.clone();
             let method_return_type = self.return_type.clone();
+            let shared_buffer_code = if self.has_string {
+                Self::get_shared_buffer_code()
+            } else {
+                quote! {}
+            };
             quote! {
                 fn #method_ident(#method_params) #method_return_type {
+                    #shared_buffer_code
                     #marshal_code
                 }
+            }
+        }
+
+        fn get_shared_buffer_code() -> TokenStream {
+            quote! {
+                let shared_buf_raw = self
+                .get_buf_mut()
+                .ok_or(InvocationError::DataBufferNotSet)?;
+            let shared_buf =
+                unsafe { slice::from_raw_parts_mut(shared_buf_raw.0, shared_buf_raw.1) };
             }
         }
 

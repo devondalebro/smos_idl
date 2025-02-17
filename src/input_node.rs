@@ -28,7 +28,8 @@ pub mod input_node {
             Box::from(BoolType {}),
             Box::from(AbsoluteCPtrType {}),
             Box::from(LocalHandleType {}),
-            Box::from(OptionType {})
+            Box::from(OptionType {}),
+            Box::from(StringType {}),
         ]
     }
     
@@ -77,7 +78,8 @@ pub mod input_node {
         BoolType, 
         LocalHandleType,
         OptionType,
-        AbsoluteCptrType
+        AbsoluteCptrType,
+        StringType
     }
 
     impl InputTypes {
@@ -87,7 +89,8 @@ pub mod input_node {
                 InputTypes::BoolType => Box::from(BoolType {}),
                 InputTypes::LocalHandleType => Box::from(LocalHandleType {}),
                 InputTypes::NumberType => Box::from(NumberType {}),
-                InputTypes::OptionType => Box::from(OptionType {})
+                InputTypes::OptionType => Box::from(OptionType {}),
+                InputTypes::StringType => Box::from(StringType {})
             }
         }
     }
@@ -112,10 +115,9 @@ pub mod input_node {
     struct NumberType {}
     impl InputType for NumberType {
         fn into_ipc_buf(&self, ident: Ident, _: Type, buffer_name: Ident, msg_index: usize) -> TokenStream {
-            let ret = quote! {
+            quote! {
                 #buffer_name.msg_regs_mut()[#msg_index] = #ident as u64;
-            };
-            ret
+            }
         }
 
         fn type_parses(&self) -> Vec<syn::Type> {
@@ -123,6 +125,8 @@ pub mod input_node {
                 parse_str("usize").expect("Couldn't parse"),
                 parse_str("u8").expect("Couldn't parse"),
                 parse_str("u64").expect("Couldn't parse"),
+                parse_str("*const u8").expect("Couldn't parse"),
+                parse_str("*mut u8").expect("Couldn't parse"),
             ]
         }
         fn consumes_register(&self) -> bool {
@@ -136,10 +140,9 @@ pub mod input_node {
     struct BoolType {}
     impl InputType for BoolType {
         fn into_ipc_buf(&self, ident: Ident, _: Type, buffer_name: Ident, msg_index: usize) -> TokenStream {
-            let ret = quote! {
+            quote! {
                 #buffer_name.msg_regs_mut()[#msg_index] = #ident.into();
-            };
-            ret
+            }
         }
 
         fn type_parses(&self) -> Vec<syn::Type> {
@@ -179,10 +182,9 @@ pub mod input_node {
     struct LocalHandleType {}
     impl InputType for LocalHandleType {
         fn into_ipc_buf(&self, ident: Ident, _: Type, buffer_name: Ident, msg_index: usize) -> TokenStream {
-            let ret = quote! {
+            quote! {
                 #buffer_name.msg_regs_mut()[#msg_index] = #ident.idx as u64;
-            };
-            ret 
+            }
         }
         fn type_parses(&self) -> Vec<syn::Type> {
             vec![
@@ -302,6 +304,27 @@ pub mod input_node {
             } else {
                 Err(Error::InvalidArg(ty.to_token_stream().to_string()))
             }
+        }
+    }
+
+    struct StringType {}
+    impl InputType for StringType {
+        fn into_ipc_buf(&self, ident: Ident, _: Type, _: Ident, _: usize) -> TokenStream {
+            quote! {
+                copy_terminated_rust_string_to_buffer(shared_buf, #ident)?;
+            }
+        }
+
+        fn type_parses(&self) -> Vec<syn::Type> {
+            vec![
+                parse_str("&str").expect("Couldn't parse"),
+            ]
+        }
+        fn consumes_register(&self) -> bool {
+            false
+        }
+        fn get_enum(&self) -> InputTypes {
+            InputTypes::StringType
         }
     }
 }
